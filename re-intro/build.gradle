@@ -20,7 +20,6 @@ repositories {
 ext {
     junitPlatformVersion = '1.5.2'
     junitJupiterVersion = '5.5.2'
-//    jqwikVersion = '1.2.3'
     spockVersion = '1.3-groovy-2.5'
 }
 
@@ -44,30 +43,16 @@ dependencies {
     // Needed for Spock. It's only logical
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junitJupiterVersion"
 
-    // aggregate jqwik dependency for property-based tests
-//    testImplementation "net.jqwik:jqwik:$jqwikVersion"
-
     // Add any other test library you need...
     testImplementation("org.assertj:assertj-core:3.12.2")
-
-    // + jqwik config file
-//    runtime files('./config')
 }
 
 test.dependsOn clean
 
 test {
     // Use junit platform for unit tests
-    useJUnitPlatform {
-        includeEngines 'junit-jupiter'
-    }
+    useJUnitPlatform ()
 
-    // Thought this block was needed after useJUnitPlatform, apparently not
-//    {
-//        includeEngines "jqwik"
-//        includeEngines 'junit-jupiter'
-//        includeEngines 'junit-vintage'
-//    }
 
     include '**/*Properties.class'
 	include '**/*Test.class'
