@@ -31,6 +31,9 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.1-jre'
 
+    // Groovy lang needed to avoid 'no Groovy Jar was found on class path'
+    compile 'org.codehaus.groovy:groovy-all:2.5.9'
+
     // Spock, for tables if nothing else
     testCompile "org.spockframework:spock-core:$spockVersion"
 
@@ -47,15 +50,12 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.12.2")
 }
 
-test.dependsOn clean
-
 test {
     // Use junit platform for unit tests
     useJUnitPlatform ()
 
-
     include '**/*Properties.class'
-	include '**/*Test.class'
+    include '**/*Test.class'
     include '**/*Tests.class'
     include '**/*Spec.class'
 }
