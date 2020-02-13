@@ -10,11 +10,15 @@ class Fraction {
     }
 
     def plus(Fraction rhs) {
+        if (rhs.denominator == 0 || denominator == 0) {
+            return new Fraction(1, 0)
+        }
+
         if (rhs.denominator == denominator) {
-            return new Fraction(rhs.numerator + numerator, denominator)
+            return new Fraction(numerator + rhs.numerator, denominator)
         } else {
             Fraction grossFraction = new Fraction(
-                    rhs.numerator * denominator + numerator * rhs.denominator,
+                    numerator * rhs.denominator + rhs.numerator * denominator,
                     rhs.denominator * denominator)
             int gcd = greatestCommonDivisor(grossFraction.numerator, grossFraction.denominator)
 
@@ -33,7 +37,7 @@ class Fraction {
 
         for (int i = 1; i <= firstNumber && i <= secondNumber; i++) {
             if(firstNumber % i == 0 && secondNumber % i == 0) {
-                gcd = i;
+                gcd = Math.abs(i);
             }
         }
 
