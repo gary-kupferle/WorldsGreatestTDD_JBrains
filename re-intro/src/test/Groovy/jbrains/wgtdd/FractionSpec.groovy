@@ -1,5 +1,6 @@
 package jbrains.wgtdd
 
+import org.apache.commons.math3.exception.NotANumberException
 import spock.lang.Specification
 
 class FractionSpec extends Specification {
@@ -74,6 +75,26 @@ class FractionSpec extends Specification {
             new Fraction(1, 3).equals(answer)
     }
 
+    def '5/4 plus "6/4" = throws; do something reasonable with mismatched types'() {
+        given:
+            Fraction a = new Fraction(5, 4)
+            Fraction b = new Fraction(6, 4)
+        when:
+            Fraction answer = a + b
+        then:
+            new Fraction(11, 4).equals(answer)
+    }
+
+    def '17/1 plus "8/1" = throws; do something reasonable with mismatched types'() {
+        given:
+            Fraction a = new Fraction(17, 1)
+            Fraction b = new Fraction(8, 1)
+        when:
+            Fraction answer = a + b
+        then:
+            new Fraction(25, 1).equals(answer)
+    }
+
     def '1/4 plus 0.3 = throws; do something reasonable with mismatched types'() {
         given:
             Fraction a = new Fraction(1, 4)
@@ -91,7 +112,6 @@ class FractionSpec extends Specification {
         then:
             thrown(MissingMethodException)
     }
-
 
     def '1/4 plus BigDecimal = throws; do something reasonable with mismatched types'() {
         given:
@@ -112,8 +132,37 @@ class FractionSpec extends Specification {
             new Fraction(1, 3).equals(answer)
     }
 
+    def '0/1 plus 0/1 = 0/1; make sure zero works as an edge case'() {
+        given:
+            Fraction a = new Fraction(0, 1)
+            Fraction b = new Fraction(0, 1)
+        when:
+            def answer = a + b
+        then:
+            new Fraction(0, 1).equals(answer)
+    }
 
-    def '1/0 plus 1/3 = 1/0; what happens with infinity'() {
+    def '0/0 plus 1/3 = undefined; neither rhs or lhs of plus can be 0/0, which is undefined'() {
+        given:
+            Fraction a = new Fraction(0, 0)
+            Fraction b = new Fraction(1, 3)
+        when:
+            def answer = a + b
+        then:
+            thrown(NotANumberException)
+    }
+
+    def '0/0 plus 0/0 = 1/0; what happens with infinity'() {
+        given:
+            Fraction a = new Fraction(5, 4)
+            Fraction b = new Fraction(0, 0)
+        when:
+            def answer = a + b
+        then:
+            thrown(NotANumberException)
+    }
+
+    def '0/0 plus 1/3 = 1/0; what happens with infinity'() {
         given:
             Fraction a = new Fraction(1, 0)
             Fraction b = new Fraction(1, 3)
@@ -133,13 +182,4 @@ class FractionSpec extends Specification {
             new Fraction(1, 0).equals(answer)
     }
 
-    def '0/0 plus 0/0 = 1/0; what happens with infinity'() {
-        given:
-            Fraction a = new Fraction(0, 0)
-            Fraction b = new Fraction(0, 0)
-        when:
-            def answer = a + b
-        then:
-            new Fraction(1, 0).equals(answer)
-    }
 }
